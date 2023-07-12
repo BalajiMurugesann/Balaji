@@ -44,8 +44,7 @@ function addCityToDOM({id, city, description, image}) {
     </a>
     </div>
    `;
-   const ele =document.querySelector("#data");
-   ele.innerHtml+=card;
-};
+   document.getElementById("data").appendChild(ele);
+}
 
 export { init, fetchCities, addCityToDOM };
