@@ -44,7 +44,7 @@ function addCityToDOM({id, city, description, image}) {
     </a>
     </div>
    `;
-   document.getElementById("data").appendChild(ele);
+   document.getElementById("data").appendChild(element);
 }
 
 export { init, fetchCities, addCityToDOM };
