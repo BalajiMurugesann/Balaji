@@ -36,10 +36,10 @@ function addCityToDOM({id, city, description, image}) {
    <a href="pages/adventures/?city=${id}" id="${id}">
    <div class="tile">
     <div class="title-text text-center">
-    <h5>${london}</h5>
+    <h5>${city}</h5>
     <p>${description}</p>
     </div>
-    <ima class = "img-responsive" src ="${image}" />
+    <img class = "img-responsive" src ="${image}" />
     </div>
     </a>
     </div>
