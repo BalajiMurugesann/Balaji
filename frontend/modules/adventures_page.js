@@ -5,8 +5,8 @@ import config from "../conf/index.js";
 function getCityFromURL(search) {
   // TODO: MODULE_ADVENTURES
   // 1. Extract the city id from the URL's Query Param and return it
-  const urlParams = new URLSearchParams(search)
-  const city = urlParams.get("city");
+  const urlparams = new URLSearchParams(search)
+  const city = urlparams.get("city");
   return city;
 }
 
@@ -16,12 +16,12 @@ async function fetchAdventures(city) {
   // 1. Fetch adventures using the Backend API and return the data
      try {
       const result = await fetch (
-        config.backendEndpoint + `/adventures?city=${city}`
+        config.backendEndpoint + "/adventures?city=" + city
 
       );
        const data = await result.json();
        return data;
-     } catch (e) {
+     } catch (error) {
        return null;
      }
 }
@@ -30,33 +30,34 @@ async function fetchAdventures(city) {
 function addAdventureToDOM(adventures) {
   // TODO: MODULE_ADVENTURES
   // 1. Populate the Adventure Cards and insert those details into the DOM
-  adventures.forEach(({id , category, image, name, costPerHead, duration}) => {
-    let ele = document.createElement("div");
-    ele.className="col-6 col-lg-3 mb-4";
-    ele.innerHTML=`
-    <a href = "detail/?adventure=${id}" id=${id}>
+     document.getElementById("data").innerHTML = "";
+     adventures.forEach((adventure)=> {
+      let adventureElem=document.createElement("div");
+      adventureElem.className="col-6 col-lg-3 mb-4 position-relative";
+      adventureElem.innerHTML=`
+    <a href = "detail/?adventure=${adventure.id}" id=${adventure.id}>
     <div class="activity-card">
-    <div class="category-banner">${category}</div>
+    <div class="category-banner">${adventure.category}</div>
     <img 
       class="img-responsive"
-      src=${image}
-      /></a>
-      <div class="activity-card-text text-md-center w-100 mt-3 px-2">
-      <div class="d-block d-md-flex justify-content-between flex-wrap pl-3 pr-3">
-      <h5 class="text-left">${name}</h5>
-      <p>₹${costPerHead}</p>
+      src=${adventure.image}
+      />
+      <div class="activity-card-text text-md-center w-100 mt-3 test-dark">
+      <div class="d-block d-md-flex justify-content-between flex-wrap ps-3">
+      <h5 class="text-left">${adventure.name}</h5>
+      <p>₹${adventure.costPerHead}</p>
       </div>
-      <div class="d-block d-md-flex justify-content-between flex-wrap pl-3 pr-3">
+      <div class="d-block d-md-flex justify-content-between flex-wrap px-3">
       <h5 class="text-left">Duration</h5>
-      <p>₹${duration}Hours</p>
+      <p>₹${adventure.duration}Hours</p>
       </div>
       </div>
       </div>
-      
+      </a>
     
     
     `;
-    document.getElementById("data").appendChild(ele);
+    document.getElementById("data").appendChild(adventureElem);
   });
     
 }
@@ -65,16 +66,23 @@ function addAdventureToDOM(adventures) {
 function filterByDuration(list, low, high) {
   // TODO: MODULE_FILTERS
   // 1. Filter adventures based on Duration and return filtered list
-
+      const filteredList= list.filter((adventure) =>  {
+        if (adventure.duration >= low && adventure.duration <=high) {
+        return adventure;
+        }
+      })
+      return filteredList;
 }
 
 //Implementation of filtering by category which takes in a list of adventures, list of categories to be filtered upon and returns a filtered list of adventures.
 function filterByCategory(list, categoryList) {
   // TODO: MODULE_FILTERS
   // 1. Filter adventures based on their Category and return filtered list
-   const filteredList =list.filter((adventure)=>
-   categoryList.includes(adventure.category)
-   );
+   const filteredList =list.filter((adventure)=>{
+   if (categoryList.includes(adventure.category)){
+     return adventure;
+   }
+  });
 
    return filteredList;
 }
@@ -90,35 +98,24 @@ function filterFunction(list, filters) {
   // TODO: MODULE_FILTERS
   // 1. Handle the 3 cases detailed in the comments above and return the filtered list of adventures
   // 2. Depending on which filters are needed, invoke the filterByDuration() and/or filterByCategory() methods
-   let filteredList = [];
-   if(filters["duration"].length>0 && filters["category"].length>0) {
-    let choice = filters["duration"].split("-");
-    filteredList=filterByDuration(
-      list,
-      parseInt(choice[0]),
-      parseInt(choice[1])
-      );
-    filteredList=filterByCategory(filteredList,filters["category"]);
-   }
+  const duration = filters["duration"];
+  const low = duration.split("-")[0]
+  const high = duration.split("-")[1]
+  console.log(duration , low , high);
+  let filteredListByDuration = filterByDuration(list,low,high);
+  console.log(filteredListByDuration);
 
-  // Place holder for functionality to work in the Stubs
-   else if (filters["duration"].length>0){
-    let choice = filters["duration"].split("-");
-    filteredList=filterByDuration(
-      list,
-      parseInt(choice[0]),
-      parseInt(choice[1])
-    );
-   }
-
-   else if (filters["category"].length>0) {
-    filteredList = filterByCategory(list,filters["category"]);
-   }
-
-   else{
-    filteredList=list;
-   }
+  let filteredListByCategory=filterByCategory(list,filters['category'])
+  if(filteredListByDuration.length && filteredListByCategory.length){
+    const filteredList = filteredListByDuration.filter(value => filteredListByCategory.includes(value))
+    return filteredList;
+  }else if (filteredListByCategory.length){
+    return filteredListByCategory;
+  }else if (filteredListByDuration.length){
+    return filteredListByDuration;
+}else{
   return list;
+}
 }
 
 //Implementation of localStorage API to save filters to local storage. This should get called everytime an onChange() happens in either of filter dropdowns
@@ -133,10 +130,10 @@ function saveFiltersToLocalStorage(filters) {
 function getFiltersFromLocalStorage() {
   // TODO: MODULE_FILTERS
   // 1. Get the filters from localStorage and return String read as an object
-  
-  localStorage.setItem("filters",JSON.stringify(filters));
+  // const filters = JSON.parse(localStorage.getItem("filters"));
+  return JSON.parse(localStorage.getItem("filters"))
   // Place holder for functionality to work in the Stubs
-  return null;
+
 }
 
 //Implementation of DOM manipulation to add the following filters to DOM :
