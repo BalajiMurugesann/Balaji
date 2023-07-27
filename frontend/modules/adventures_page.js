@@ -8,6 +8,7 @@ function getCityFromURL(search) {
   const urlparams = new URLSearchParams(search)
   const city = urlparams.get("city");
   return city;
+
 }
 
 //Implementation of fetch call with a paramterized input based on city
@@ -24,6 +25,7 @@ async function fetchAdventures(city) {
      } catch (error) {
        return null;
      }
+
 }
 
 //Implementation of DOM manipulation to add adventures for the given city from list of adventures
@@ -60,6 +62,7 @@ function addAdventureToDOM(adventures) {
     document.getElementById("data").appendChild(adventureElem);
   });
     
+
 }
 
 //Implementation of filtering by duration which takes in a list of adventures, the lower bound and upper bound of duration and returns a filtered list of adventures.
@@ -72,6 +75,7 @@ function filterByDuration(list, low, high) {
         }
       })
       return filteredList;
+
 }
 
 //Implementation of filtering by category which takes in a list of adventures, list of categories to be filtered upon and returns a filtered list of adventures.
@@ -85,6 +89,7 @@ function filterByCategory(list, categoryList) {
   });
 
    return filteredList;
+
 }
 
 // filters object looks like this filters = { duration: "", category: [] };
@@ -117,13 +122,14 @@ function filterFunction(list, filters) {
   return list;
 }
 }
-
 //Implementation of localStorage API to save filters to local storage. This should get called everytime an onChange() happens in either of filter dropdowns
 function saveFiltersToLocalStorage(filters) {
   // TODO: MODULE_FILTERS
   // 1. Store the filters as a String to localStorage
    localStorage.setItem("filters",JSON.stringify(filters));
    return true;
+
+  
 }
 
 //Implementation of localStorage API to get filters from local storage. This should get called whenever the DOM is loaded.
@@ -134,6 +140,10 @@ function getFiltersFromLocalStorage() {
   return JSON.parse(localStorage.getItem("filters"))
   // Place holder for functionality to work in the Stubs
 
+
+
+  // Place holder for functionality to work in the Stubs
+  
 }
 
 //Implementation of DOM manipulation to add the following filters to DOM :
@@ -153,6 +163,7 @@ function generateFilterPillsAndUpdateDOM(filters) {
 
     document.getElementById("category-list").appendChild(ele);       
  });  
+
 }
 export {
   getCityFromURL,
