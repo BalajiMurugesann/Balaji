@@ -11,7 +11,7 @@ function getAdventureIdFromURL(search) {
 
 
   // Place holder for functionality to work in the Stubs
-  return null;
+  
 }
 //Implementation of fetch call with a paramterized input based on adventure ID
 async function fetchAdventureDetails(adventureId) {
@@ -31,7 +31,7 @@ async function fetchAdventureDetails(adventureId) {
 
 
   // Place holder for functionality to work in the Stubs
-  return null;
+  
 }
 
 //Implementation of DOM manipulation to add adventure details to DOM
